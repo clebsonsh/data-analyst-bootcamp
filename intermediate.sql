@@ -37,3 +37,14 @@ FROM employee_demographics AS ed
     RIGHT OUTER JOIN employee_salary AS es
         ON ed.employee_id = es.employee_id;
 
+-- SELF JOIN
+SELECT les.employee_id AS id_santa,
+       les.first_name AS first_name_santa,
+       les.last_name AS last_name_santa,
+       res.employee_id AS id_emp,
+       res.first_name AS first_name_emp,
+       res.last_name AS last_name_emp
+FROM employee_salary AS les
+    JOIN employee_salary AS res
+        ON les.employee_id + 1 = res.employee_id;
+
