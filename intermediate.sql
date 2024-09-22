@@ -63,4 +63,31 @@ FROM employee_demographics AS ed
         ON ed.employee_id = es.employee_id
     LEFT OUTER JOIN parks_departments pd
         ON es.dept_id = pd.department_id
+-- UNION
+-- by default UNION is set to DISTINCT
+SELECT employee_id, first_name, last_name
+FROM employee_demographics
+UNION
+SELECT employee_id, first_name, last_name
+FROM employee_salary;
+
+-- we can change this behavior with ALL
+SELECT employee_id, first_name, last_name
+FROM employee_demographics
+UNION ALL
+SELECT employee_id, first_name, last_name
+FROM employee_salary;
+
+SELECT first_name, last_name, '40+ Man' AS label
+FROM employee_demographics
+WHERE age > 40 AND gender = 'Male'
+UNION ALL
+SELECT first_name, last_name, '40+ Lady' AS label
+FROM employee_demographics
+WHERE age > 40 AND gender = 'Female'
+UNION ALL
+SELECT first_name, last_name, 'Highly Paid' AS label
+FROM employee_salary
+WHERE salary > 70000
+ORDER BY first_name, last_name;
 
