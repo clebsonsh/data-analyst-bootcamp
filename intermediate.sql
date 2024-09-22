@@ -48,3 +48,19 @@ FROM employee_salary AS les
     JOIN employee_salary AS res
         ON les.employee_id + 1 = res.employee_id;
 
+-- Joining multiple tables
+SELECT ed.employee_id,
+       ed.first_name,
+       ed.last_name,
+       ed.age,
+       ed.gender,
+       ed.birth_date,
+       es.occupation,
+       es.salary,
+       pd.department_name
+FROM employee_demographics AS ed
+    INNER JOIN employee_salary AS es
+        ON ed.employee_id = es.employee_id
+    LEFT OUTER JOIN parks_departments pd
+        ON es.dept_id = pd.department_id
+
