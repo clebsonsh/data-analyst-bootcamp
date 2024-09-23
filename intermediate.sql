@@ -99,3 +99,76 @@ FROM employee_salary
 WHERE salary > 70000
 ORDER BY first_name, last_name;
 
+-- String Functions
+
+-- LENGTH give how many character a string have
+SELECT first_name, LENGTH(first_name) as first_name_length
+FROM employee_demographics
+ORDER BY first_name_length;
+
+-- UPPER make a string uppercase
+SELECT UPPER('sky');
+
+-- LOWER make a string lowercase
+SELECT LOWER('SKY');
+
+SELECT first_name, UPPER(first_name) as first_name_uppercase
+FROM employee_demographics;
+
+-- TRIM remove spaces before and after
+SELECT TRIM('       sky        ');
+
+-- LTRIM remove spaces before
+SELECT LTRIM('       sky        ');
+
+-- RTRIM remove spaces after
+SELECT RTRIM('       sky        ');
+
+-- LEFT take n characters from the start
+SELECT
+    first_name,
+    LEFT(first_name, 4)
+FROM employee_demographics;
+
+-- RIGHT take n characters from the end
+SELECT
+    first_name,
+    RIGHT(first_name, 4)
+FROM employee_demographics;
+
+-- SUBSTRING take two arguments, position and length
+-- position is where we start(if is a negative number, we count from the end)
+-- length is how many character we should take (if not present, it take until the end of the string)
+SELECT
+    first_name,
+    SUBSTRING(first_name, 3, 2)
+FROM employee_demographics;
+
+-- can be used with dates
+SELECT
+    birth_date,
+    SUBSTRING(birth_date, 6, 2)
+FROM employee_demographics;
+
+-- REPLACE match and replace, it's case sensitive
+SELECT
+    first_name,
+    REPLACE(first_name, 'a', 'z')
+FROM employee_demographics;
+
+-- LOCATE show the position where it match in a string
+-- isn't case sensitive
+SELECT LOCATE('b', 'Clebson');
+
+SELECT
+    first_name,
+    LOCATE('an', first_name)
+FROM employee_demographics;
+
+-- CONCAT concatenate strings
+SELECT
+    first_name,
+    last_name,
+    CONCAT(first_name, ' ', last_name) as full_name
+FROM employee_demographics;
+
