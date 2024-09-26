@@ -35,4 +35,25 @@ WITH cte_ed AS (
 SELECT *
 FROM cte_ed
 JOIN cte_es
-    on cte_ed.employee_id = cte_es.employee_id
+    on cte_ed.employee_id = cte_es.employee_id;
+
+-- Temporary Tables - are only available for the session they where created
+-- Create empty temporary table and add data into it
+CREATE TEMPORARY TABLE temp_table (
+    first_name varchar(50),
+    last_name varchar(50),
+    favorite_movie varchar(100)
+);
+
+INSERT INTO temp_table
+VALUES('Clebson', 'Moura', 'Fight Club');
+
+SELECT * FROM temp_table;
+
+-- Create temporary table with a subset of data from another table
+CREATE TEMPORARY TABLE salary_over_70k
+SELECT *
+FROM employee_salary
+WHERE salary >= 70000;
+
+SELECT * FROM salary_over_70k;
