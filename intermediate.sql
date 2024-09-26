@@ -201,6 +201,35 @@ SELECT
     END AS bonus
 FROM employee_salary;
 
+-- Subqueries, a query inside a query
+-- Using subquery in a WHERE statement, the subquery should return only 1 column
+SELECT *
+FROM employee_demographics
+WHERE employee_id IN (
+    SELECT employee_id
+    FROM employee_salary
+    WHERE dept_id = 1
+);
+
+-- Subquery in SELECT
+SELECT
+    first_name,
+    salary,
+    (
+        SELECT AVG(salary)
+        FROM employee_salary
+    ) avg_salary
+FROM employee_salary;
+
+-- Subquery in FROM
+SELECT AVG(max_age)
+FROM (
+    SELECT
+        MAX(age) AS max_age
+    FROM employee_demographics
+    GROUP BY gender) AS agg_table;
+
+
 -- Window Functions
 -- Both GROUP BY and window functions are powerful tools in SQL.
 -- Choosing between them depends on the specific requirements of your query
@@ -244,4 +273,3 @@ SELECT
 FROM employee_demographics AS ed
 JOIN employee_salary AS es
     ON ed.employee_id = es.employee_id;
-
