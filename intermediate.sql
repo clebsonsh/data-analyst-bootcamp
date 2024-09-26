@@ -201,3 +201,47 @@ SELECT
     END AS bonus
 FROM employee_salary;
 
+-- Window Functions
+-- Both GROUP BY and window functions are powerful tools in SQL.
+-- Choosing between them depends on the specific requirements of your query
+-- and the kind of analysis you want to perform.
+-- If you need to create summaries (e.g., total sales by product), use GROUP BY.
+-- If you need to analyze data while maintaining the detail
+-- (e.g., cumulative totals or rankings), use window functions.
+SELECT gender, AVG(salary) AS avg_salary
+FROM employee_demographics AS ed
+JOIN employee_salary AS es
+    ON ed.employee_id = es.employee_id
+GROUP BY ed.gender;
+
+-- PARTITION BY
+SELECT
+    ed.first_name,
+    gender,
+    AVG(salary) OVER(PARTITION BY gender) AS avg_salary
+FROM employee_demographics AS ed
+JOIN employee_salary AS es
+    ON ed.employee_id = es.employee_id;
+
+-- PARTITION BY with ORDER BY
+SELECT
+    ed.first_name,
+    gender,
+    salary,
+    SUM(salary) OVER(PARTITION BY gender ORDER BY es.employee_id) AS rolling_total
+FROM employee_demographics AS ed
+JOIN employee_salary AS es
+    ON ed.employee_id = es.employee_id;
+
+-- ROW NUMBER
+SELECT
+    ed.first_name,
+    gender,
+    es.salary,
+    ROW_NUMBER() OVER (PARTITION BY gender ORDER BY salary DESC) AS row_num,
+    RANK() OVER (PARTITION BY gender ORDER BY salary DESC) AS rank_num,
+    DENSE_RANK() OVER (PARTITION BY gender ORDER BY salary DESC) AS dense_rank_num
+FROM employee_demographics AS ed
+JOIN employee_salary AS es
+    ON ed.employee_id = es.employee_id;
+
