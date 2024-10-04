@@ -57,3 +57,38 @@ FROM employee_salary
 WHERE salary >= 70000;
 
 SELECT * FROM salary_over_70k;
+
+-- Store Procedure - A piece of sql code that can be reused
+CREATE PROCEDURE large_salaries()
+SELECT *
+FROM employee_salary
+WHERE salary >= 50000;
+
+CALL large_salaries();
+
+-- Store Procedure with multiple queries
+DELIMITER $$
+CREATE PROCEDURE large_salaries2()
+BEGIN
+    SELECT *
+    FROM employee_salary
+    WHERE salary >= 50000;
+    SELECT *
+    FROM employee_salary
+    WHERE salary >= 10000;
+END $$
+DELIMITER ;
+
+CALL large_salaries2();
+
+-- Store Procedure with params
+DELIMITER $$
+CREATE PROCEDURE get_salary_by_employee_id(p_employee_id INT)
+BEGIN
+    SELECT salary
+    FROM employee_salary
+    WHERE employee_id = p_employee_id;
+END $$
+DELIMITER ;
+
+CALL get_salary_by_employee_id(1);
