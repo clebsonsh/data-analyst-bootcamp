@@ -92,3 +92,37 @@ END $$
 DELIMITER ;
 
 CALL get_salary_by_employee_id(1);
+
+-- Triggers and Events
+-- a trigger is code that will run when something occur in a table
+DELIMITER $$
+CREATE TRIGGER employee_created
+    AFTER INSERT ON employee_salary
+    FOR EACH ROW
+BEGIN
+    INSERT INTO employee_demographics (employee_id, first_name, last_name)
+    VALUES (NEW.employee_id, NEW.first_name, NEW.last_name);
+END $$
+DELIMITER ;
+
+INSERT INTO employee_salary (employee_id, first_name, last_name, occupation, salary, dept_id)
+VALUES (13, "Clebson", "Moura", "HTMX CTO", 700000, null);
+
+SELECT * FROM employee_salary;
+SELECT * FROM employee_demographics;
+
+-- Events are similar to triggers but they run on a schedule
+DELIMITER $$
+CREATE EVENT delete_retirees
+ON SCHEDULE EVERY 30 SECOND
+DO
+    BEGIN
+        DELETE
+        FROM employee_demographics
+        WHERE age >= 60;
+    END $$
+DELIMITER ;
+
+-- If events are not running make sure scheduler is on
+SHOW VARIABLES LIKE "event%";
+SET GLOBAL event_scheduler=ON;
