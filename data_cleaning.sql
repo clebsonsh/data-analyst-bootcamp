@@ -42,7 +42,7 @@ CREATE TABLE layoffs_staging2
     industry              text NULL,
     total_laid_off        int  NULL,
     percentage_laid_off   text NULL,
-    date                  text NULL,
+    `date`                  text NULL,
     stage                 text NULL,
     country               text NULL,
     funds_raised_millions int  NULL,
@@ -91,7 +91,7 @@ FROM layoffs_staging2;
 
 UPDATE layoffs_staging2
 SET industry = 'Crypto'
-WHERE industry like "Crypto%";
+WHERE industry LIKE "Crypto%";
 
 SELECT DISTINCT country
 FROM layoffs_staging2
@@ -100,10 +100,9 @@ ORDER BY 1;
 -- remove trailing comma
 UPDATE layoffs_staging2
 SET country = TRIM(TRAILING '.' FROM country)
-WHERE country like "%.";
+WHERE country LIKE "%.";
 
-SELECT
-  `date`
+SELECT `date`
 FROM layoffs_staging2
 ORDER BY 1;
 
@@ -111,11 +110,10 @@ UPDATE layoffs_staging2
 SET `date` = NULL
 WHERE `date` = 'NULL';
 
--- format date to proper date type
+-- format `date` to proper date string type
 UPDATE layoffs_staging2
 SET `date` = STR_TO_DATE(`date`, '%m/%d/%Y')
-WHERE `date` is not null
-  AND `date` != 'NULL';
+WHERE `date` IS NOT NULL;
 
 ALTER TABLE layoffs_staging2
 MODIFY COLUMN `date` DATE;
@@ -133,16 +131,16 @@ WHERE industry = 'NULL';
 SELECT t1.company, t1.industry, t2.industry
 FROM layoffs_staging2 AS t1
 JOIN layoffs_staging2 AS t2
-  ON t1.company = t2.company
+    ON t1.company = t2.company
 WHERE t1.industry IS NULL
-  AND t2.industry IS NOT NULL;
+    AND t2.industry IS NOT NULL;
 
 UPDATE layoffs_staging2 AS t1
 JOIN layoffs_staging2 AS t2
     ON t1.company = t2.company
 SET t1.industry = t2.industry
 WHERE t1.industry IS NULL
-  AND t2.industry IS NOT NULL;
+AND t2.industry IS NOT NULL;
 
 -- 4. Remove Any Useless Columns or Rows
 SELECT *
@@ -162,4 +160,3 @@ DELETE
 FROM layoffs_staging2
 WHERE total_laid_off IS NULL
   AND percentage_laid_off IS NULL;
-
